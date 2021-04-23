@@ -9,6 +9,7 @@ import com.lambdaschool.bookstore.repository.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
@@ -45,7 +46,7 @@ public class BookServiceImpl
     public Book findBookById(long id)
     {
         return bookrepos.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Book with id " + id + " Not Found!"));
+                .orElseThrow(() -> new EntityNotFoundException("Book with id " + id + " Not Found!"));
     }
 
     @Transactional
@@ -58,7 +59,7 @@ public class BookServiceImpl
             bookrepos.deleteById(id);
         } else
         {
-            throw new ResourceNotFoundException("Book with id " + id + " Not Found!");
+            throw new EntityNotFoundException("Book with id " + id + " Not Found!");
         }
     }
 
@@ -80,7 +81,7 @@ public class BookServiceImpl
         if (book.getSection() != null)
         {
             newBook.setSection(sectionService.findSectionById(book.getSection()
-                    .getSectionid()));
+                                                                      .getSectionid()));
         }
 
         newBook.getWrotes()
@@ -88,7 +89,7 @@ public class BookServiceImpl
         for (Wrote w : book.getWrotes())
         {
             Author addAuthor = authorrepos.findById(w.getAuthor()
-                    .getAuthorid())
+                                                            .getAuthorid())
                     .orElseThrow(() -> new ResourceNotFoundException("Author Id " + w.getAuthor()
                             .getAuthorid() + " Not Found!"));
             newBook.getWrotes()
@@ -122,7 +123,7 @@ public class BookServiceImpl
         if (book.getSection() != null)
         {
             currentBook.setSection(sectionService.findSectionById(book.getSection()
-                    .getSectionid()));
+                                                                          .getSectionid()));
         }
 
         if (book.getWrotes()
@@ -133,7 +134,7 @@ public class BookServiceImpl
             for (Wrote w : book.getWrotes())
             {
                 Author addAuthor = authorrepos.findById(w.getAuthor()
-                        .getAuthorid())
+                                                                .getAuthorid())
                         .orElseThrow(() -> new ResourceNotFoundException("Author Id " + w.getAuthor()
                                 .getAuthorid() + " Not Found!"));
                 currentBook.getWrotes()

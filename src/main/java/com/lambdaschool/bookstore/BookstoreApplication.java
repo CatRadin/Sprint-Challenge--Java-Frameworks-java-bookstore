@@ -3,7 +3,6 @@ package com.lambdaschool.bookstore;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
@@ -12,7 +11,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
  */
 @EnableJpaAuditing
 @SpringBootApplication
-@PropertySource(value = "file:/Users/Sam/OneDrive/Desktop/web39bookstoreconfig.properties", ignoreResourceNotFound = true)
 public class BookstoreApplication
 {
     /**
@@ -56,7 +54,7 @@ public class BookstoreApplication
         {
             // so run the application!
             SpringApplication.run(BookstoreApplication.class,
-                    args);
+                                  args);
         }
     }
 }

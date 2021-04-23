@@ -45,26 +45,33 @@ public class ResourceServerConfig
         // hasAnyRole = must be authenticated and be assigned this role!
         http.authorizeRequests()
                 .antMatchers("/",
-                        "/h2-console/**",
-                        "/swagger-resources/**",
-                        "/swagger-resource/**",
-                        "/swagger-ui.html",
-                        "/v2/api-docs",
-                        "/webjars/**",
-                        "/createnewuser")
+                             "/h2-console/**",
+                             "/swagger-resources/**",
+                             "/swagger-resource/**",
+                             "/swagger-ui.html",
+                             "/v2/api-docs",
+                             "/webjars/**",
+                             "/createnewuser")
                 .permitAll()
-                .antMatchers(HttpMethod.GET, "/books/books", "/books/book/**").authenticated()
-                .antMatchers(HttpMethod.POST, "/books/book").hasAnyRole("ADMIN")
-                .antMatchers(HttpMethod.PUT, "/books/book/**").hasAnyRole("ADMIN")
-                .antMatchers(HttpMethod.DELETE, "/books/book/**").hasAnyRole("ADMIN")
+                .antMatchers(HttpMethod.POST, "/books/book")
+                .hasAnyRole("ADMIN")
+                .antMatchers(HttpMethod.PUT, "/books/book/**")
+                .hasAnyRole("ADMIN")
+                .antMatchers(HttpMethod.DELETE, "/books/book/**")
+                .hasAnyRole("ADMIN")
+                .antMatchers(HttpMethod.GET, "/books/books")
+                .authenticated()
+                .antMatchers(HttpMethod.GET, "/books/book/**")
+                .authenticated()
                 .antMatchers("/users/**",
-                        "/useremails/**",
-                        "/oauth/revoke-token",
-                        "/logout")
+                             "/useremails/**",
+                             "/oauth/revoke-token",
+                             "/logout")
                 .authenticated()
                 .antMatchers("/roles/**")
                 .hasAnyRole("ADMIN", "DATA")
-                .anyRequest().denyAll()
+                .anyRequest()
+                .denyAll()
                 .and()
                 .exceptionHandling()
                 .accessDeniedHandler(new OAuth2AccessDeniedHandler());

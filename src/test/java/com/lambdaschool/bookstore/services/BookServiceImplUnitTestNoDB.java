@@ -6,7 +6,6 @@ import com.lambdaschool.bookstore.models.Author;
 import com.lambdaschool.bookstore.models.Book;
 import com.lambdaschool.bookstore.models.Section;
 import com.lambdaschool.bookstore.models.Wrote;
-import com.lambdaschool.bookstore.repository.AuthorRepository;
 import com.lambdaschool.bookstore.repository.BookRepository;
 import org.junit.After;
 import org.junit.Before;
@@ -23,8 +22,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static junit.framework.TestCase.assertNotNull;
-import static org.mockito.ArgumentMatchers.any;
 import static junit.framework.TestCase.assertEquals;
 
 @RunWith(SpringRunner.class)
@@ -34,9 +31,6 @@ public class BookServiceImplUnitTestNoDB
 
     @Autowired
     private BookService bookService;
-
-    @MockBean
-    private SectionService sectionService;
 
     @MockBean
     private BookRepository bookrepos;
@@ -51,15 +45,15 @@ public class BookServiceImplUnitTestNoDB
         Author a1 = new Author("John", "Mitchell");
         a1.setAuthorid(1);
         Author a2 = new Author("Dan", "Brown");
-        a2.setAuthorid(2);
+        a1.setAuthorid(2);
         Author a3 = new Author("Jerry", "Poe");
-        a3.setAuthorid(3);
+        a1.setAuthorid(3);
         Author a4 = new Author("Wells", "Teague");
-        a4.setAuthorid(4);
+        a1.setAuthorid(4);
         Author a5 = new Author("George", "Gallinger");
-        a5.setAuthorid(5);
+        a1.setAuthorid(5);
         Author a6 = new Author("Ian", "Stewart");
-        a6.setAuthorid(6);
+        a1.setAuthorid(6);
 
         Section s1 = new Section("Fiction");
         s1.setSectionid(1);
@@ -75,33 +69,33 @@ public class BookServiceImplUnitTestNoDB
         Book b1 = new Book("Flatterland", "9780738206752", 2001, s1);
         b1.setBookid(1);
         b1.getWrotes()
-                .add(new Wrote(a6, b1));
+            .add(new Wrote(a6, b1));
         myBookList.add(b1);
 
         Book b2 = new Book("Digital Fortess", "9788489367012", 2007, s1);
         b2.setBookid(2);
         b2.getWrotes()
-                .add(new Wrote(a2, b2));
+            .add(new Wrote(a2, b2));
         myBookList.add(b2);
 
         Book b3 = new Book("The Da Vinci Code", "9780307474278", 2009, s1);
         b3.setBookid(3);
         b3.getWrotes()
-                .add(new Wrote(a2, b3));
+            .add(new Wrote(a2, b3));
         myBookList.add(b3);
 
         Book b4 = new Book("Essentials of Finance", "1314241651234", 0, s4);
         b4.setBookid(4);
         b4.getWrotes()
-                .add(new Wrote(a3, b4));
+            .add(new Wrote(a3, b4));
         b4.getWrotes()
-                .add(new Wrote(a5, b4));
+            .add(new Wrote(a5, b4));
         myBookList.add(b4);
 
         Book b5 = new Book("Calling Texas Home", "1885171382134", 2000, s3);
         b5.setBookid(5);
         b5.getWrotes()
-                .add(new Wrote(a4, b5));
+            .add(new Wrote(a4, b5));
         myBookList.add(b5);
 
         System.out.println("Size " + myBookList.size());
@@ -124,7 +118,6 @@ public class BookServiceImplUnitTestNoDB
     {
         Mockito.when(bookrepos.findAll())
                 .thenReturn(myBookList);
-
         assertEquals(5,
                 bookService.findAll().size());
     }
@@ -132,68 +125,34 @@ public class BookServiceImplUnitTestNoDB
     @Test
     public void findBookById()
     {
-        Mockito.when(bookrepos.findById(4L))
-                .thenReturn(Optional.of(myBookList.get(3)));
-        assertEquals("Essentials of Finance",
-                bookService.findBookById(4L).getTitle());
+        Mockito.when(bookrepos.findById(3L))
+                .thenReturn(Optional.of(myBookList.get(2)));
+        assertEquals("The Da Vinci Code",
+                bookService.findBookById(3L).getTitle());
     }
 
     @Test(expected = ResourceNotFoundException.class)
     public void notFindBookById()
     {
-        Mockito.when(bookrepos.findById(999L))
-                .thenThrow(ResourceNotFoundException.class);
-
-        assertEquals("Flatterland",
-                bookService.findBookById(999L).getTitle());
+        Mockito.when(bookrepos.findById(1337L))
+                .thenReturn(Optional.empty());
+        assertEquals("Java For Dummies",
+                bookService.findBookById(1337L).getTitle());
     }
 
     @Test
     public void delete()
     {
-        Mockito.when(bookrepos.findById(4L))
-                .thenReturn(Optional.of(myBookList.get(3)));
-
-        Mockito.doNothing().when(bookrepos).deleteById(4L);
-
-        bookService.delete(4L);
+        Mockito.when(bookrepos.findById(1L))
+                .thenReturn(Optional.of(myBookList.get(0)));
+        Mockito.doNothing().when(bookrepos).deleteById(1L);
+        bookService.delete(1L);
         assertEquals(5, myBookList.size());
     }
 
     @Test
     public void save()
     {
-//        System.out.println("In save test");
-//        Section s6 = new Section("Poetry");
-//        s6.setSectionid(6);
-//
-//        Book b6 = new Book("Leaves of Grass", "1945644273", 1855, s6);
-//        b6.setBookid(6);
-//        System.out.println("***b6.getBookid = " + b6.getBookid());
-//
-//        System.out.println("Made section and book");
-//        Author a7 = new Author("Walt", "Whitman");
-//        a7.setAuthorid(7);
-//
-//        System.out.println("Made author");
-//        b6.getWrotes()
-//                .add(new Wrote(a7, b6));
-//
-//        System.out.println("Made Wrote");
-//        Mockito.when(bookrepos.findById(6L))
-//                .thenReturn(Optional.of(b6));
-//        Mockito.when(sectionService.findSectionById(6))
-//                .thenReturn(s6);
-//        Mockito.when(bookrepos.save(any(Book.class)))
-//                .thenReturn(b6);
-//        Mockito.when(authorrepos.findById(7L))
-//                .thenReturn(Optional.of(a7));
-//
-//        System.out.println("Mocked repositories");
-////        Book addBook = bookService.save(b6);
-////        assertNotNull(addBook);
-//        assertEquals(b6.getTitle(),
-//                bookService.save(b6).getTitle());
     }
 
     @Test

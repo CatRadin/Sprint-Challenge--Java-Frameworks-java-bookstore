@@ -57,6 +57,4 @@ abstract class Auditable
     @LastModifiedDate
     @Temporal(TIMESTAMP)
     protected Date lastmodifieddate;
-
-    public abstract String getName();
 }
