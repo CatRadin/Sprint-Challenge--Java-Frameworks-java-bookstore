@@ -134,10 +134,10 @@ public class BookServiceImplUnitTestNoDB
     @Test(expected = ResourceNotFoundException.class)
     public void notFindBookById()
     {
-        Mockito.when(bookrepos.findById(1337L))
+        Mockito.when(bookrepos.findById(1234L))
                 .thenReturn(Optional.empty()); // This Test Fails Per the ReadMe! ---------------------------------
         assertEquals("The Hunger Games",
-                bookService.findBookById(1337L).getTitle());
+                bookService.findBookById(1234L).getTitle());
     }
 
     @Test
