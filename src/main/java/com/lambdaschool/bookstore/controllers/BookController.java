@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,7 +30,8 @@ public class BookController
     @Autowired
     BookService bookService;
 
-    // http://localhost:2019/books/books
+    // http://localhost:2019/books/books ---------------------------------------------------------
+    @PreAuthorize(value = "hasAnyRole('ADMIN', 'DATA')") //Authorize
     @GetMapping(value = "/books",
             produces = {"application/json"})
     public ResponseEntity<?> listAllBooks(HttpServletRequest request)
@@ -39,7 +41,8 @@ public class BookController
                                     HttpStatus.OK);
     }
 
-    // http://localhost:2019/books/book/{bookId}
+    // http://localhost:2019/books/book/{bookId} -------------------------------------------------
+    @PreAuthorize(value = "hasAnyRole('ADMIN', 'DATA')") //Authorize
     @GetMapping(value = "/book/{bookId}",
             produces = {"application/json"})
     public ResponseEntity<?> getBookById(HttpServletRequest request,
@@ -51,7 +54,8 @@ public class BookController
                                     HttpStatus.OK);
     }
 
-    // POST http://localhost:2019/books/book
+    // POST http://localhost:2019/books/book -------------------------------------------------------
+    @PreAuthorize(value = "hasAnyRole('ADMIN')") //Authorize
     @PostMapping(value = "/book", consumes = "application/json")
     public ResponseEntity<?> addNewBook(@Valid @RequestBody Book newBook) throws
             URISyntaxException
@@ -59,7 +63,7 @@ public class BookController
         newBook.setBookid(0);
         newBook = bookService.save(newBook);
 
-        // set the location header for the newly created resource
+        // set the location header for the newly created resource --------------------------------
         HttpHeaders responseHeaders = new HttpHeaders();
         URI newBookURI = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{bookid}")
@@ -72,7 +76,8 @@ public class BookController
                                     HttpStatus.CREATED);
     }
 
-    // PUT http://localhost:2019/books/book/1
+    // PUT http://localhost:2019/books/book/1 ----------------------------------------------------
+    @PreAuthorize(value = "hasAnyRole('ADMIN')") //Authorize
     @PutMapping(value = "/book/{bookid}",
             consumes = "application/json")
     public ResponseEntity<?> updateFullBook(
@@ -89,6 +94,7 @@ public class BookController
     }
 
     // DELETE http://localhost:2019/books/book/1
+    @PreAuthorize(value = "hasAnyRole('ADMIN')") //Authorize
     @DeleteMapping(value = "/book/{id}")
     public ResponseEntity<?> deleteBookById(
             @PathVariable
