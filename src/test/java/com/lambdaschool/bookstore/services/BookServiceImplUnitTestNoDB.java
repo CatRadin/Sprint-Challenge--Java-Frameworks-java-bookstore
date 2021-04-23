@@ -126,7 +126,7 @@ public class BookServiceImplUnitTestNoDB
     public void findBookById()
     {
         Mockito.when(bookrepos.findById(3L))
-                .thenReturn(Optional.of(myBookList.get(2))); //This will find the Da Vinci Code ----------------------
+                .thenReturn(Optional.of(myBookList.get(2))); //This will find the Da Vinci Code (love this book) ----------------------
         assertEquals("The Da Vinci Code",
                 bookService.findBookById(3L).getTitle());
     }
@@ -135,7 +135,7 @@ public class BookServiceImplUnitTestNoDB
     public void notFindBookById()
     {
         Mockito.when(bookrepos.findById(1337L))
-                .thenReturn(Optional.empty()); //
+                .thenReturn(Optional.empty()); // This Test Fails Per the ReadMe! ---------------------------------
         assertEquals("The Hunger Games",
                 bookService.findBookById(1337L).getTitle());
     }
