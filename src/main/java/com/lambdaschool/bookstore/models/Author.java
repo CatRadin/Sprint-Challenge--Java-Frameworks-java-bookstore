@@ -25,7 +25,7 @@ public class Author
     private String fname;
     private String lname;
 
-    @OneToMany(mappedBy = "author",
+    @OneToMany(mappedBy = "author", //One to Many
             cascade = CascadeType.ALL,
             orphanRemoval = true)
     @JsonIgnoreProperties("author")
