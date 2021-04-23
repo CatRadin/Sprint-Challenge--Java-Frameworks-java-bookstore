@@ -116,7 +116,7 @@ public class BookServiceImplUnitTestNoDB
     @Test
     public void findAll()
     {
-        Mockito.when(bookrepos.findAll())
+        Mockito.when(bookrepos.findAll()) //Find All Test --------------------
                 .thenReturn(myBookList);
         assertEquals(5,
                 bookService.findAll().size());
@@ -126,7 +126,7 @@ public class BookServiceImplUnitTestNoDB
     public void findBookById()
     {
         Mockito.when(bookrepos.findById(3L))
-                .thenReturn(Optional.of(myBookList.get(2)));
+                .thenReturn(Optional.of(myBookList.get(2))); //This will find the Da Vinci Code ----------------------
         assertEquals("The Da Vinci Code",
                 bookService.findBookById(3L).getTitle());
     }
@@ -135,8 +135,8 @@ public class BookServiceImplUnitTestNoDB
     public void notFindBookById()
     {
         Mockito.when(bookrepos.findById(1337L))
-                .thenReturn(Optional.empty());
-        assertEquals("Java For Dummies",
+                .thenReturn(Optional.empty()); //
+        assertEquals("The Hunger Games",
                 bookService.findBookById(1337L).getTitle());
     }
 
